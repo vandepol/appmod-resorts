@@ -1,5 +1,5 @@
 // Jenkinsfile for Liberty App - CI/CD
-def templateName = 'gse-liberty'
+def templateName = 'resorts-liberty'
 
 openshift.withCluster() {
   env.NAMESPACE = openshift.project()
@@ -101,6 +101,56 @@ pipeline {
         }
       }
     }
+    
+    stage ('Push Container Image') {
+          agent {
+            kubernetes {
+              cloud 'openshift'
+              label 'skopeo-jenkins'
+              yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: jnlp
+    image: jkwong/skopeo-jenkins
+    tty: true
+  serviceAccountName: jenkins
+"""
+            }
+          }
+
+          steps {
+            script {
+                openshift.withCluster() {
+                    openshift.withProject() {
+                      
+                      def srcImage = OUTPUT_IMAGE
+                     
+                      println "source image: ${srcImage}, dest image: ${env.DST_IMAGE}"
+                      
+                      def openshift_token = readFile "/var/run/secrets/kubernetes.io/serviceaccount/token"
+                      echo "Username: AFuser: ${env.AFuser}"
+                      echo "Username: AFpasswd: ${env.AFpasswd}"
+                      echo "Username: AFuser: ${params.AFuser}"
+                      echo "Username: AFpasswd: ${params.AFpasswd}"
+                      
+                     // withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'username', usernameVariable: 'password')]) {
+                              sh """
+                              /usr/bin/skopeo copy \
+                              --src-creds openshift:${openshift_token} \
+                              --src-tls-verify=false \
+                              --dest-creds vandepol:42L0LN5we8 \
+                              --dest-tls-verify=false \
+                              docker://${srcImage} \
+                              docker://${env.DST_IMAGE}
+                              """
+                              println("Image is successfully pushed to https://${env.DST_IMAGE}")
+                      //    }
+                    }
+                }
+            }
+        }
 
     stage('Promote to Prod') {
       steps {
