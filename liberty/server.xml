@@ -1,0 +1,25 @@
+<server>
+  <featureManager>
+      <feature>localConnector-1.0</feature>
+      <feature>ejbLite-3.1</feature>
+      <feature>jaxrs-1.1</feature>
+      <feature>jpa-2.0</feature>
+      <feature>jsp-2.3</feature>
+      <feature>servlet-3.1</feature>
+      <feature>monitor-1.0</feature>
+  </featureManager>
+
+
+  <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint">
+    <tcpOptions soReuseAddr="true"/>
+  </httpEndpoint>
+
+  <keyStore id="defaultKeyStore" password="whodunit"/>
+
+  <applicationMonitor updateTrigger="mbean"/>
+
+  <application id="modresorts" name="Mod Resports" type="war" location="modresorts-1.0.war">
+    <classloader apiTypeVisibility="spec, ibm-api, third-party" />
+  </application>
+
+</server>
