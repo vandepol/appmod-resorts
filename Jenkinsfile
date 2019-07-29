@@ -33,8 +33,7 @@ pipeline {
       steps {
         sh """
         env
-        mvn -v 
-        cd CustomerOrderServicesProject
+        mvn -v
         mvn clean package
         """
       }
@@ -44,8 +43,7 @@ pipeline {
     stage('Unit Test'){
       steps {
         sh """
-        mvn -v 
-        cd CustomerOrderServicesProject
+        mvn -v
         mvn test
         """
       }
