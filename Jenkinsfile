@@ -151,7 +151,7 @@ spec:
                 }
             }
         }
-
+    }
     stage('Promote to Prod') {
       steps {
         script {
