@@ -86,7 +86,7 @@ pipeline {
             openshift.withProject() {
               def outputImage = OUTPUT_IMAGE
               println "Tagging image: ${outputImage} as ${env.DEV}/${params.APPLICATION_NAME}:latest"
-              openshift.tag("${output}", "${env.DEV}/${params.APPLICATION_NAME}:latest")
+              openshift.tag("${outputImage}", "${env.DEV}/${params.APPLICATION_NAME}:latest")
             }
           }
         }
