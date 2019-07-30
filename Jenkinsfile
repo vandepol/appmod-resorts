@@ -137,7 +137,7 @@ spec:
             script {
                 openshift.withCluster() {
                     openshift.withProject() {
-                      DESTINATION_IMAGE = 
+                  
                       def srcImage = env.REGISTRY_ROUTE + "/" + OUTPUT_IMAGE
                      
                       println "source image: ${srcImage}, dest image: ${env.DST_IMAGE}"
