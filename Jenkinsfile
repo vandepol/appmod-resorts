@@ -70,8 +70,7 @@ pipeline {
                 def buildObj = build.object()
                 def imageRef = buildObj.status.outputDockerImageReference
                 def tmpImg  = imageRef.indexOf("/")
-                OUTPUT_IMAGE = env.REGISTRY_ROUTE + "/" + imageRef.substring(tmpImg + 1, imageRef.length())
-                OUTPUT_IMAGE_SUBSTRING = imageRef.substring(tmpImg + 1, imageRef.length())
+                OUTPUT_IMAGE =  imageRef.substring(tmpImg + 1, imageRef.length())
                 // print the build logs
                 build.logs('-f')
               }
@@ -86,9 +85,8 @@ pipeline {
           openshift.withCluster() {
             openshift.withProject() {
               def outputImage = OUTPUT_IMAGE
-              def outputImageSubString = OUTPUT_IMAGE_SUBSTRING
-              println "Tagging image: ${outputImageSubString} as ${env.DEV}/${params.APPLICATION_NAME}:latest"
-              openshift.tag("${outputImageSubString}", "${env.DEV}/${params.APPLICATION_NAME}:latest")
+              println "Tagging image: ${outputImage} as ${env.DEV}/${params.APPLICATION_NAME}:latest"
+              openshift.tag("${outputImage}", "${env.DEV}/${params.APPLICATION_NAME}:latest")
             }
           }
         }
@@ -140,7 +138,7 @@ spec:
                 openshift.withCluster() {
                     openshift.withProject() {
                       
-                      def srcImage = OUTPUT_IMAGE
+                      def srcImage = env.REGISTRY_ROUTE + "/" + OUTPUT_IMAGE
                      
                       println "source image: ${srcImage}, dest image: ${env.DST_IMAGE}"
                       
