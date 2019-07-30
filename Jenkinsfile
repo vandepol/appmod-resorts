@@ -137,7 +137,7 @@ spec:
             script {
                 openshift.withCluster() {
                     openshift.withProject() {
-                      
+                      DESTINATION_IMAGE = 
                       def srcImage = env.REGISTRY_ROUTE + "/" + OUTPUT_IMAGE
                      
                       println "source image: ${srcImage}, dest image: ${env.DST_IMAGE}"
@@ -171,7 +171,7 @@ spec:
           //  openshift.withCluster('prod-east', 'my-prilvileged-token-id') {
           openshift.withCluster('prod-east', 'vIxFo4nQHncQzgryIXtSrp4r77leA0dBMv89E_f9IRU') {
             openshift.withProject() {
-              openshift.tag("${outputImage}", "${env.PROD}/${params.APPLICATION_NAME}:latest")
+              openshift.tag("${env.DST_IMAGE}", "${env.PROD}/${params.APPLICATION_NAME}:latest")
             }
           }
         }
