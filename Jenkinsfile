@@ -71,6 +71,7 @@ pipeline {
                 def imageRef = buildObj.status.outputDockerImageReference
                 def tmpImg  = imageRef.indexOf("/")
                 OUTPUT_IMAGE = env.REGISTRY_ROUTE + "/" + imageRef.substring(tmpImg + 1, imageRef.length())
+                OUTPUT_IMAGE_SUBSTRING = imageRef.substring(tmpImg + 1, imageRef.length())
                 // print the build logs
                 build.logs('-f')
               }
@@ -85,8 +86,9 @@ pipeline {
           openshift.withCluster() {
             openshift.withProject() {
               def outputImage = OUTPUT_IMAGE
-              println "Tagging image: ${outputImage} as ${env.REGISTRY_ROUTE}/${env.DEV}/${params.APPLICATION_NAME}:latest"
-              openshift.tag("${outputImage}", "${env.REGISTRY_ROUTE}/${env.DEV}/${params.APPLICATION_NAME}:latest")
+              def outputImageSubString = OUTPUT_IMAGE_SUBSTRING
+              println "Tagging image: ${outputImageSubString} as ${env.DEV}/${params.APPLICATION_NAME}:latest"
+              openshift.tag("${outputImageSubString}", "${env.DEV}/${params.APPLICATION_NAME}:latest")
             }
           }
         }
