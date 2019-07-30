@@ -40,7 +40,7 @@ pipeline {
       steps {
         sh """
         env
-        mvn -v
+        //mvn -v
         mvn clean package
         """
       }
