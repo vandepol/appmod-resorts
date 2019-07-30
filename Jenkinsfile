@@ -165,13 +165,13 @@ spec:
             }
         }
     }
-    stage('Promote to Prod') {
+    stage('Promote to Prod East') {
       steps {
         script {
           //  openshift.withCluster('prod-east', 'my-prilvileged-token-id') {
           openshift.withCluster('prod-east', 'vIxFo4nQHncQzgryIXtSrp4r77leA0dBMv89E_f9IRU') {
             openshift.withProject() {
-              openshift.tag("${env.DST_IMAGE}", "${env.PROD}/${params.APPLICATION_NAME}:latest")
+              openshift.tag("${env.DST_IMAGE}", "roland-demo-prod-east/${params.APPLICATION_NAME}:latest")
             }
           }
         }
