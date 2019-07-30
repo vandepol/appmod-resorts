@@ -169,7 +169,7 @@ spec:
       steps {
         script {
           //  openshift.withCluster('prod-east', 'my-prilvileged-token-id') {
-          openshift.withCluster() {
+          openshift.withCluster('prod-east', 'vIxFo4nQHncQzgryIXtSrp4r77leA0dBMv89E_f9IRU') {
             openshift.withProject() {
               openshift.tag("${outputImage}", "${env.PROD}/${params.APPLICATION_NAME}:latest")
             }
