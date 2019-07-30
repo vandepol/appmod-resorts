@@ -92,6 +92,7 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject() {
+              println "Tagging image: ${env.DEV}/${env.APP_NAME}:latest as ${env.STAGE}/${env.APP_NAME}:latest"
               openshift.tag("${env.DEV}/${env.APP_NAME}:latest", "${env.STAGE}/${env.APP_NAME}:latest")
             }
           }
