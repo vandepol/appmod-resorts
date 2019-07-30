@@ -107,10 +107,10 @@ pipeline {
       }
     }
 
-    stage('Promotion gate') {
+    stage('Promote to Production?') {
       steps {
         script {
-          input message: 'Promote application to Production?'
+          input message: 'Promote ${APPLICATION_NAME} to Production?'
         }
       }
     }
