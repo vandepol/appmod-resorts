@@ -171,9 +171,7 @@ spec:
           //  openshift.withCluster('prod-east', 'my-prilvileged-token-id') {
           openshift.withCluster() {
             openshift.withProject() {
-              kubectl get pods
-              printf "depoy here"
-              //openshiftDeploy apiURL: 'https://c1-e.us-east.containers.cloud.ibm.com:20955', authToken: 'vIxFo4nQHncQzgryIXtSrp4r77leA0dBMv89E_f9IRU', depCfg: '', namespace: 'roland-demo-prod-east', verbose: 'false', waitTime: '', waitUnit: 'sec'
+              openshift.tag("${outputImage}", "${env.PROD}/${params.APPLICATION_NAME}:latest")
             }
           }
         }
