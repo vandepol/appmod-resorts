@@ -57,28 +57,28 @@ pipeline {
     }
       
     // Build Container Image using the artifacts produced in previous stages
-    stage('Build Liberty App Image'){
-      steps {
-        script {
-          // Build container image using local Openshift cluster
-          openshift.withCluster() {
-            openshift.withProject() {
-                timeout (time: 10, unit: 'MINUTES') {
-                // run the build and wait for completion
-                def build = openshift.selector("bc", "${params.APPLICATION_NAME}").startBuild("--from-dir=.")
-                                    
-                def buildObj = build.object()
-                def imageRef = buildObj.status.outputDockerImageReference
-                def tmpImg  = imageRef.indexOf("/")
-                OUTPUT_IMAGE =  imageRef.substring(tmpImg + 1, imageRef.length())
-                // print the build logs
-                build.logs('-f')
-              }
-            }        
-          }
-        }
-      }
-    } 
+//    stage('Build Liberty App Image'){
+//      steps {
+//        script {
+//          // Build container image using local Openshift cluster
+//          openshift.withCluster() {
+//            openshift.withProject() {
+//                timeout (time: 10, unit: 'MINUTES') {
+//               // run the build and wait for completion
+//                def build = openshift.selector("bc", "${params.APPLICATION_NAME}").startBuild("--from-dir=.")
+//                                    
+//                def buildObj = build.object()
+//                def imageRef = buildObj.status.outputDockerImageReference
+//                def tmpImg  = imageRef.indexOf("/")
+//                OUTPUT_IMAGE =  imageRef.substring(tmpImg + 1, imageRef.length())
+//                // print the build logs
+//                build.logs('-f')
+//              }
+//           }        
+//          }
+//        }
+//      }
+//    } 
     stage('Promote to Dev') {
       steps {
         script {
@@ -171,6 +171,7 @@ spec:
           openshift.withCluster() {
             openshift.withProject() {
               openshift.tag("${env.STAGE}/${env.APP_NAME}:latest", "${env.PROD}/${env.APP_NAME}:latest")
+              openshiftDeploy apiURL: 'https://c1-e.us-east.containers.cloud.ibm.com:20955', authToken: 'vIxFo4nQHncQzgryIXtSrp4r77leA0dBMv89E_f9IRU', depCfg: '', namespace: 'roland-demo-prod-east', verbose: 'false', waitTime: '', waitUnit: 'sec'
             }
           }
         }
