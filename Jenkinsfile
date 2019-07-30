@@ -85,7 +85,7 @@ pipeline {
           openshift.withCluster() {
             openshift.withProject() {
               def outputImage = OUTPUT_IMAGE
-              println "Tagging image: ${outputImage} as ${env.DEV}/${params.APPLICATION_NAME}:latest"
+              println "Tagging image : ${outputImage} as ${env.DEV}/${params.APPLICATION_NAME}:latest"
               openshift.tag("${outputImage}", "${env.DEV}/${params.APPLICATION_NAME}:latest")
             }
           }
@@ -99,7 +99,7 @@ pipeline {
           openshift.withCluster() {
             openshift.withProject() {
               def outputImage = OUTPUT_IMAGE
-              println "Tagging image: ${outputImage} as ${env.STAGE}/${params.APPLICATION_NAME}:latest"
+              println "Tagging image : ${outputImage} as ${env.STAGE}/${params.APPLICATION_NAME}:latest"
               openshift.tag("${outputImage}", "${env.STAGE}/${params.APPLICATION_NAME}:latest")
             }
           }
