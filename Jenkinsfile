@@ -63,10 +63,14 @@ pipeline {
           // Build container image using local Openshift cluster
           openshift.withCluster() {
             openshift.withProject() {
-              timeout (time: 10, unit: 'MINUTES') {
+                timeout (time: 10, unit: 'MINUTES') {
                 // run the build and wait for completion
                 def build = openshift.selector("bc", "${params.APPLICATION_NAME}").startBuild("--from-dir=.")
                                     
+                def buildObj = build.object()
+                def imageRef = buildObj.status.outputDockerImageReference
+                def tmpImg  = imageRef.indexOf("/")
+                OUTPUT_IMAGE = env.REGISTRY_ROUTE + "/" + imageRef.substring(tmpImg + 1, imageRef.length())
                 // print the build logs
                 build.logs('-f')
               }
@@ -80,7 +84,9 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject() {
-              openshift.tag("${env.BUILD}/${env.APP_NAME}:latest", "${env.DEV}/${env.APP_NAME}:latest")
+              def outputImage = OUTPUT_IMAGE
+              println "Tagging image: ${outputImage}:latest as ${env.DEV}/${params.APPLICATION_NAME}:latest"
+              openshift.tag("${output}:latest", "${env.DEV}/${params.APPLICATION_NAME}:latest")
             }
           }
         }
@@ -92,8 +98,9 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject() {
-              println "Tagging image: ${env.DEV}/${env.APP_NAME}:latest as ${env.STAGE}/${env.APP_NAME}:latest"
-              openshift.tag("${env.DEV}/${env.APP_NAME}:latest", "${env.STAGE}/${env.APP_NAME}:latest")
+              def outputImage = OUTPUT_IMAGE
+              println "Tagging image: ${outputImage}:latest as ${env.STAGE}/${params.APPLICATION_NAME}:latest"
+              openshift.tag("${outputImage}:latest", "${env.STAGE}/${params.APPLICATION_NAME}:latest")
             }
           }
         }
