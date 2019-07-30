@@ -85,8 +85,8 @@ pipeline {
           openshift.withCluster() {
             openshift.withProject() {
               def outputImage = OUTPUT_IMAGE
-              println "Tagging image: ${outputImage} as ${env.DEV}/${params.APPLICATION_NAME}:latest"
-              openshift.tag("${outputImage}", "${env.DEV}/${params.APPLICATION_NAME}:latest")
+              println "Tagging image: ${outputImage} as ${env.REGISTRY_ROUTE}/${env.DEV}/${params.APPLICATION_NAME}:latest"
+              openshift.tag("${outputImage}", "${env.REGISTRY_ROUTE}/${env.DEV}/${params.APPLICATION_NAME}:latest")
             }
           }
         }
