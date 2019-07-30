@@ -168,10 +168,22 @@ spec:
     stage('Promote to Prod East') {
       steps {
         script {
-          //  openshift.withCluster('prod-east', 'my-prilvileged-token-id') {
           openshift.withCluster('prod-east', 'vIxFo4nQHncQzgryIXtSrp4r77leA0dBMv89E_f9IRU') {
             openshift.withProject() {
+               printf "Pushing public image into Prod East image repo to trigger image update trigger."
               openshift.tag("${env.DST_IMAGE}", "roland-demo-prod-east/${params.APPLICATION_NAME}:latest")
+            }
+          }
+        }
+      }
+    }
+    stage('Prod West Trigger Deploy') {
+      steps {
+        script {
+          openshift.withCluster('prod-west', '3P8TKKFm_Gppd_RHCdjCLNl9UQw_iAdpcW7v4m7B3mg') {
+            openshift.withProject() {
+              printf "Pushing public image into Prod West image repo to trigger image update trigger."
+              openshift.tag("${env.DST_IMAGE}", "roland-demo-prod-west/${params.APPLICATION_NAME}:latest")
             }
           }
         }
